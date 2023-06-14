@@ -64,4 +64,11 @@ jobs:
     - name: Deploy to EC2
       run: |
           ssh deploy_ec2 "mkdir temp"
+          ssh deploy_ec2 "git clone https://github.com/muhammadalifaqsha/mlprocess_iris_classifier.git temp"
+          ssh deploy_ec2 "rsync -a ./temp ./mlprocess_iris_classifier"
+          ssh deploy_ec2 "rm -rf temp/"
+          ssh deploy_ec2 "cd mlprocess_iris_classifier"
+          ssh deploy_ec2 "cd mlprocess_iris_classifier && sudo docker compose down"
+          ssh deploy_ec2 "cd mlprocess_iris_classifier || sudo docker rmi iris-classifier-api -f || sudo docker rmi iris-classifier-streamlit -f"
+          ssh deploy_ec2 "cd mlprocess_iris_classifier && sudo docker compose up -d"
           
